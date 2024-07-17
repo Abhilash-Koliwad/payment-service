@@ -1,0 +1,75 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-branch-connection-table
+      author: abhilashkoliwad@gmail.com
+      changes:
+        - createTable:
+            tableName: BRANCH_CONNECTION
+            columns:
+              - column:
+                  name: ID
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: ORIGIN_BRANCH_ID
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: DESTINATION_BRANCH_ID
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: CREATED_AT
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: UPDATED_AT
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: VERSION
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: BRANCH_CONNECTION
+            baseColumnNames: ORIGIN_BRANCH_ID
+            referencedTableName: BRANCH
+            referencedColumnNames: ID
+            constraintName: fk_branch_connection_origin_branch
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: BRANCH_CONNECTION
+            baseColumnNames: DESTINATION_BRANCH_ID
+            referencedTableName: BRANCH
+            referencedColumnNames: ID
+            constraintName: fk_branch_connection_destination_branch
+            onDelete: CASCADE
+        - loadData:
+            tableName: BRANCH_CONNECTION
+            file: db/changelog/data/branch-connection.csv
+            columns:
+              - column:
+                  name: ID
+                  type: UUID
+              - column:
+                  name: ORIGIN_BRANCH_ID
+                  type: UUID
+              - column:
+                  name: DESTINATION_BRANCH_ID
+                  type: UUID
+              - column:
+                  name: CREATED_AT
+                  type: TIMESTAMP
+              - column:
+                  name: UPDATED_AT
+                  type: TIMESTAMP
+              - column:
+                  name: VERSION
+                  type: BIGINT
