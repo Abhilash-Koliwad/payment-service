@@ -1,5 +1,6 @@
 package com.abhilash.payment_service.resource;
 
+import com.abhilash.payment_service.resource.dto.ProcessPaymentResponseDto;
 import com.abhilash.payment_service.service.IPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,9 @@ public class PaymentResource implements IPaymentResource {
 
     @Override
     @GetMapping
-    public ResponseEntity<String> processPayment(@RequestParam UUID originBranchId, @RequestParam UUID destinationBranchId) {
-        return ResponseEntity.ok(paymentService.processPayment(originBranchId, destinationBranchId));
+    public ResponseEntity<ProcessPaymentResponseDto> processPayment(@RequestParam UUID originBranchId, @RequestParam UUID destinationBranchId) {
+        String branchSequence = paymentService.processPayment(originBranchId, destinationBranchId);
+        return ResponseEntity.ok(new ProcessPaymentResponseDto(branchSequence));
     }
 
 }
