@@ -1,7 +1,9 @@
 package com.abhilash.payment_service.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,10 +14,12 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "Branch")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Branch {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "name", nullable = false, unique = true)

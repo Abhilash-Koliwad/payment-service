@@ -1,7 +1,9 @@
 package com.abhilash.payment_service.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,10 +13,12 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "Branch_Connection")
+@AllArgsConstructor
+@NoArgsConstructor
 public class BranchConnection {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(targetEntity = Branch.class, fetch = FetchType.EAGER, optional = false)
