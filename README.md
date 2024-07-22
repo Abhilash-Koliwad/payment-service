@@ -10,28 +10,40 @@ The project is implemented in Java & Spring Boot leveraging
 
 ### Database 
 Application is configured with H2 in-memory SQL database with the below tables,
-#### Branch (Columns - id, name, transfer_cost, created_at, updated_at, version)
-#### Branch_Connection (Properties - id, origin_branch_id, destination_branch_id, created_at, updated_at, version)
+- **Branch**: Representing a bank branch
+  - Columns - id, name, transfer_cost, created_at, updated_at, version
+- **Branch_Connection**: Representing connection between branches 
+  - Columns - id, origin_branch_id, destination_branch_id, created_at, updated_at, version<br>
+
 The data mentioned in the problem statement is already loaded into the tables via liquibase changelog i.e.,<br>
-Branches - A,B,C,D,E,F<br>
-Branch Connections, 
-- A to B 
-- A to C
-- C to B
-- B to D
-- C to E
-- D to E
-- E to D
-- D to F
-- E to F
+- **Branches** - A,B,C,D,E,F<br>
+- **Branch Connections**, 
+  - A to B 
+  - A to C
+  - C to B
+  - B to D
+  - C to E
+  - D to E
+  - E to D
+  - D to F
+  - E to F
 
 ### Core logic
-The logic to find the cheapest way to make a payment between two branches is implemented using Dijkstra's algorithm in PaymentService.java class
+The logic to find the cheapest way to make a payment between two branches is implemented using Dijkstra's algorithm in `PaymentService.java` class
 
-### REST API
-API to process payments is exposed in PaymentResource.
+### REST API Endpoint
+The API for processing payments is exposed in the `PaymentResource` class which is designed to find the cheapest payment route between two branches.
+
+- **Method**: POST
+- **Path**: `/payment`
+- **Request Body**:
+  ```json
+  {
+    "originBranchId": "UUID",
+    "destinationBranchId": "UUID"
+  }
 
 ### Application Tests
-PaymentResourceIntegrationTest - Spring boot integration test class covering all the cases. (Direct branch connection, Indirect branch connection, No branch connection)<br>
-PaymentResourceTest - Unit test class for PaymentResource.<br>
-PaymentServiceTest - Unit test class for PaymentResource covering all the cases. (Direct branch connection, Indirect branch connection, No branch connection)
+- **PaymentResourceIntegrationTest** - Spring boot integration test class covering all the cases. (Direct branch connection, Indirect branch connection, No branch connection)<br>
+- **PaymentResourceTest** - Unit test class for `PaymentResource`.<br>
+- **PaymentServiceTest** - Unit test class for `PaymentService` covering all the cases. (Direct branch connection, Indirect branch connection, No branch connection)

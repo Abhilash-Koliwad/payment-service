@@ -4,6 +4,7 @@ import com.abhilash.payment_service.domain.Branch;
 import com.abhilash.payment_service.domain.BranchConnection;
 import com.abhilash.payment_service.repository.BranchConnectionRepository;
 import com.abhilash.payment_service.repository.BranchRepository;
+import com.abhilash.payment_service.resource.dto.ProcessPaymentRequestDto;
 import com.abhilash.payment_service.resource.dto.ProcessPaymentResponseDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -72,9 +73,10 @@ public class PaymentResourceIntegrationTest {
         // Given
         UUID branchAId = branchA.getId();
         UUID branchBId = branchB.getId();
+        ProcessPaymentRequestDto dto = new ProcessPaymentRequestDto(branchAId, branchBId);
 
         // When
-        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(branchAId, branchBId);
+        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(dto);
 
         // Then
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -87,9 +89,10 @@ public class PaymentResourceIntegrationTest {
         // Given
         UUID branchAId = branchA.getId();
         UUID branchCId = branchC.getId();
+        ProcessPaymentRequestDto dto = new ProcessPaymentRequestDto(branchAId, branchCId);
 
         // When
-        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(branchAId, branchCId);
+        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(dto);
 
         // Then
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -102,9 +105,10 @@ public class PaymentResourceIntegrationTest {
         // Given
         UUID branchAId = branchA.getId();
         UUID branchDId = branchD.getId();
+        ProcessPaymentRequestDto dto = new ProcessPaymentRequestDto(branchAId, branchDId);
 
         // When
-        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(branchAId, branchDId);
+        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(dto);
 
         // Then
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -118,9 +122,10 @@ public class PaymentResourceIntegrationTest {
         // Given
         UUID branchAId = branchA.getId();
         UUID branchFId = branchF.getId();
+        ProcessPaymentRequestDto dto = new ProcessPaymentRequestDto(branchAId, branchFId);
 
         // When
-        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(branchAId, branchFId);
+        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(dto);
 
         // Then
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -133,9 +138,10 @@ public class PaymentResourceIntegrationTest {
         // Given
         UUID branchAId = branchA.getId();
         UUID branchEId = branchE.getId();
+        ProcessPaymentRequestDto dto = new ProcessPaymentRequestDto(branchAId, branchEId);
 
         // When
-        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(branchAId, branchEId);
+        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(dto);
 
         // Then
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -149,9 +155,10 @@ public class PaymentResourceIntegrationTest {
         // Given
         UUID branchEId = branchE.getId();
         UUID branchAId = branchA.getId();
+        ProcessPaymentRequestDto dto = new ProcessPaymentRequestDto(branchEId, branchAId);
 
         // When
-        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(branchEId, branchAId);
+        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(dto);
 
         // Then
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());

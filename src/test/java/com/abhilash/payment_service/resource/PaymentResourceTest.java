@@ -1,5 +1,6 @@
 package com.abhilash.payment_service.resource;
 
+import com.abhilash.payment_service.resource.dto.ProcessPaymentRequestDto;
 import com.abhilash.payment_service.resource.dto.ProcessPaymentResponseDto;
 import com.abhilash.payment_service.service.IPaymentService;
 import org.junit.jupiter.api.Assertions;
@@ -32,11 +33,12 @@ public class PaymentResourceTest {
         // Given
         UUID originBranchId = UUID.randomUUID();
         UUID destinationBranchId = UUID.randomUUID();
+        ProcessPaymentRequestDto dto = new ProcessPaymentRequestDto(originBranchId, destinationBranchId);
         String branchSequence = "A,D,C";
         Mockito.when(paymentService.processPayment(originBranchId, destinationBranchId)).thenReturn(branchSequence);
 
         // When
-        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(originBranchId, destinationBranchId);
+        ResponseEntity<ProcessPaymentResponseDto> response = paymentResource.processPayment(dto);
 
         // Then
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
