@@ -28,10 +28,10 @@ public class PaymentService implements IPaymentService {
         Branch destinationBranch = findBranchById(destinationBranchId);
         return branchConnectionRepository.findByOriginBranchIdAndDestinationBranchId(originBranchId, destinationBranchId)
                 .map(branchConnection -> String.join(",", originBranch.getName(), destinationBranch.getName()))
-                .orElse(processPayment(originBranch, destinationBranch));
+                .orElse(getIndirectBranchConnectionSequence(originBranch, destinationBranch));
     }
 
-    private String processPayment(Branch originBranch, Branch destinationBranch) {
+    private String getIndirectBranchConnectionSequence(Branch originBranch, Branch destinationBranch) {
         Map<Branch, BigDecimal> minCost = new HashMap<>();
         Map<Branch, Branch> previousBranch = new HashMap<>();
         PriorityQueue<Branch> queue = new PriorityQueue<>(Comparator.comparing(minCost::get));
