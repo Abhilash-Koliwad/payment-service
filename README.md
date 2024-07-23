@@ -29,7 +29,7 @@ The data mentioned in the problem statement is already loaded into the tables vi
   - E to F
 
 ### Core logic
-The logic to find the cheapest way to make a payment between two branches is implemented using Dijkstra's algorithm in `PaymentService.java` class
+The logic to find the cheapest way to make a payment between two branches is implemented using Dijkstra's algorithm in `PaymentService` class
 
 ### REST API Endpoint
 The API for processing payments is exposed in the `PaymentResource` class which is designed to find the cheapest payment route between two branches.
