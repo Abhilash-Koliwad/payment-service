@@ -28,46 +28,56 @@ public class PaymentService implements IPaymentService {
         Branch destinationBranch = findBranchById(destinationBranchId);
         return branchConnectionRepository.findByOriginBranchIdAndDestinationBranchId(originBranchId, destinationBranchId)
                 .map(branchConnection -> String.join(",", originBranch.getName(), destinationBranch.getName()))
-                .orElse(getIndirectBranchConnectionSequence(originBranch, destinationBranch));
+                .orElseGet(() -> getIndirectBranchConnectionSequence(originBranch, destinationBranch));
     }
 
     private String getIndirectBranchConnectionSequence(Branch originBranch, Branch destinationBranch) {
-        Map<Branch, BigDecimal> minCost = new HashMap<>();
-        Map<Branch, Branch> previousBranch = new HashMap<>();
-        PriorityQueue<Branch> queue = new PriorityQueue<>(Comparator.comparing(minCost::get));
-
-        branchRepository.findAll().forEach(branch -> {
-            BigDecimal costFromOriginBranch = branch.equals(originBranch) ? BigDecimal.ZERO : BigDecimal.valueOf(Long.MAX_VALUE);
-            minCost.put(branch, costFromOriginBranch);
-        });
-
-        queue.add(originBranch);
-
-        while (!queue.isEmpty()) {
-            Branch current = queue.poll();
+        Map<Branch, BigDecimal> minCostFromOriginMap = initializeMinCostMap(originBranch);
+        Map<Branch, Branch> previousBranchMap = new HashMap<>();
+        PriorityQueue<Branch> priorityQueue = new PriorityQueue<>(Comparator.comparing(minCostFromOriginMap::get));
+        priorityQueue.add(originBranch);
+        while (!priorityQueue.isEmpty()) {
+            Branch current = priorityQueue.poll();
             if (current.equals(destinationBranch)) {
-                return buildPath(previousBranch, destinationBranch);
+                return buildBranchSequence(previousBranchMap, destinationBranch);
             }
-            branchConnectionRepository.findByOriginBranchId(current.getId()).forEach(connection -> {
-                Branch neighbor = connection.getDestinationBranch();
-                BigDecimal newCost = minCost.get(current).add(current.getTransferCost());
-                if (newCost.compareTo(minCost.get(neighbor)) < 0) {
-                    queue.remove(neighbor);
-                    minCost.put(neighbor, newCost);
-                    previousBranch.put(neighbor, current);
-                    queue.add(neighbor);
-                }
-            });
+            updateCostsForNeighbors(current, minCostFromOriginMap, previousBranchMap, priorityQueue);
         }
         return null;
     }
 
-    private String buildPath(Map<Branch, Branch> previousBranch, Branch destinationBranch) {
-        List<String> path = new LinkedList<>();
+    private Map<Branch, BigDecimal> initializeMinCostMap(Branch originBranch) {
+        Map<Branch, BigDecimal> minCostFromOriginMap = new HashMap<>();
+        branchRepository.findAll().forEach(branch ->
+                minCostFromOriginMap.put(branch, branch.equals(originBranch) ? BigDecimal.ZERO : BigDecimal.valueOf(Long.MAX_VALUE))
+        );
+        return minCostFromOriginMap;
+    }
+
+    private String buildBranchSequence(Map<Branch, Branch> previousBranch, Branch destinationBranch) {
+        List<String> branchSequence = new LinkedList<>();
         for (Branch branch = destinationBranch; branch != null; branch = previousBranch.get(branch)) {
-            path.addFirst(branch.getName());
+            branchSequence.addFirst(branch.getName());
         }
-        return String.join(",", path);
+        return String.join(",", branchSequence);
+    }
+
+    private void updateCostsForNeighbors(
+            Branch current,
+            Map<Branch, BigDecimal> minCostFromOriginMap,
+            Map<Branch, Branch> previousBranchMap,
+            PriorityQueue<Branch> priorityQueue
+    ) {
+        branchConnectionRepository.findByOriginBranchId(current.getId()).forEach(connection -> {
+            Branch neighbor = connection.getDestinationBranch();
+            BigDecimal newCost = minCostFromOriginMap.get(current).add(current.getTransferCost());
+            if (newCost.compareTo(minCostFromOriginMap.get(neighbor)) < 0) {
+                priorityQueue.remove(neighbor);
+                minCostFromOriginMap.put(neighbor, newCost);
+                previousBranchMap.put(neighbor, current);
+                priorityQueue.add(neighbor);
+            }
+        });
     }
 
     private Branch findBranchById(UUID id) {
