@@ -16,7 +16,13 @@ Application is configured with H2 in-memory SQL database with the below tables,
   - Columns - id, origin_branch_id, destination_branch_id, created_at, updated_at, version<br>
 
 The data mentioned in the problem statement is already loaded into the tables via liquibase changelog i.e.,<br>
-- **Branches** - A,B,C,D,E,F<br>
+- **Branches** 
+  - A (ID: 60cd3195-b2c6-4d47-8ae6-a3cf4c99c3c0)
+  - B (ID: b9495c1b-a66f-4d57-b59b-4f7204751be7)
+  - C (ID: 10bed16b-609d-45ce-afec-66963cc7c552)
+  - D (ID: f3fba5c7-4e13-457a-b686-ead00aba1e66)
+  - E (ID: 98e63497-dabb-4d69-80fb-9411801f49e3)
+  - F (ID: 55b69417-852a-46a4-838c-7d97c5c6d54b) 
 - **Branch Connections**, 
   - A to B 
   - A to C
@@ -29,19 +35,7 @@ The data mentioned in the problem statement is already loaded into the tables vi
   - E to F
 
 ### Core logic
-The logic to find the cheapest way to make a payment between two branches is implemented using Dijkstra's algorithm in `PaymentService` class
-
-### REST API Endpoint
-The API for processing payments is exposed in the `PaymentResource` class which is designed to find the cheapest payment route between two branches.
-
-- **Method**: POST
-- **Path**: `/payment`
-- **Request Body**:
-  ```json
-  {
-    "originBranchId": "UUID",
-    "destinationBranchId": "UUID"
-  }
+The logic to find the cheapest way to make a payment between two branches is implemented using Dijkstra's algorithm in `PaymentService` class.
 
 ### Application Tests
 - **PaymentResourceIntegrationTest** - Spring boot integration test class covering all the cases. (Direct branch connection, Indirect branch connection, No branch connection)<br>
@@ -61,3 +55,67 @@ The API for processing payments is exposed in the `PaymentResource` class which 
 - Run the application
   ```sh
   mvn spring-boot:run
+
+### REST API Endpoint
+The API for processing payments is exposed in the `PaymentResource` class which is designed to find the cheapest payment route between two branches.
+
+- **Method**: POST
+- **Path**: `/payment/process`
+- **Request Body**:
+  ```json
+  {
+    "originBranchId": "UUID",
+    "destinationBranchId": "UUID"
+  }
+- **Response Body**:
+  ```json
+  {
+    "branchSequence": "String"
+  }
+
+### Sample API Requests
+Below are the API requests,
+- **Direct branch connection - A->B**
+  ```json
+  POST http://localhost:8080/payment/process
+  Accept: application/json
+  Content-Type: application/json
+  {
+  "originBranchId": "60cd3195-b2c6-4d47-8ae6-a3cf4c99c3c0",
+  "destinationBranchId": "b9495c1b-a66f-4d57-b59b-4f7204751be7"
+  }
+  
+  Response:
+  {
+  "branchSequence": "A,B"
+  }
+
+- **Indirect branch connection - A->D**
+  ```json
+  POST http://localhost:8080/payment/process
+  Accept: application/json
+  Content-Type: application/json
+  {
+  "originBranchId": "60cd3195-b2c6-4d47-8ae6-a3cf4c99c3c0",
+  "destinationBranchId": "f3fba5c7-4e13-457a-b686-ead00aba1e66"
+  }
+  
+  Response:
+  {
+  "branchSequence": "A,C,E,D"
+  }
+
+- **No branch connection - E->A**
+  ```json
+  POST http://localhost:8080/payment/process
+  Accept: application/json
+  Content-Type: application/json
+  {
+  "originBranchId": "98e63497-dabb-4d69-80fb-9411801f49e3",
+  "destinationBranchId": "60cd3195-b2c6-4d47-8ae6-a3cf4c99c3c0"
+  }
+  
+  Response:
+  {
+  "branchSequence": null
+  }
