@@ -76,46 +76,55 @@ The API for processing payments is exposed in the `PaymentResource` class which 
 ### Sample API Requests
 Below are the API requests,
 - **Direct branch connection - A->B**
-  ```json
-  POST http://localhost:8080/payment/process
-  Accept: application/json
-  Content-Type: application/json
-  {
-  "originBranchId": "60cd3195-b2c6-4d47-8ae6-a3cf4c99c3c0",
-  "destinationBranchId": "b9495c1b-a66f-4d57-b59b-4f7204751be7"
-  }
-  
-  Response:
-  {
-  "branchSequence": "A,B"
-  }
+    <br><i>Request</i><br>
+    ```
+    POST http://localhost:8080/payment/process
+    Accept: application/json
+    Content-Type: application/json
+    {
+    "originBranchId": "60cd3195-b2c6-4d47-8ae6-a3cf4c99c3c0",
+    "destinationBranchId": "b9495c1b-a66f-4d57-b59b-4f7204751be7"
+    }
+  ```
+  <i>Response</i>
+  ```
+    {
+    "branchSequence": "A,B"
+    }
+  ```
 
 - **Indirect branch connection - A->D**
-  ```json
-  POST http://localhost:8080/payment/process
-  Accept: application/json
-  Content-Type: application/json
-  {
-  "originBranchId": "60cd3195-b2c6-4d47-8ae6-a3cf4c99c3c0",
-  "destinationBranchId": "f3fba5c7-4e13-457a-b686-ead00aba1e66"
-  }
-  
-  Response:
-  {
-  "branchSequence": "A,C,E,D"
-  }
+  <br><i>Request</i><br>
+    ```
+    POST http://localhost:8080/payment/process
+    Accept: application/json
+    Content-Type: application/json
+    {
+    "originBranchId": "60cd3195-b2c6-4d47-8ae6-a3cf4c99c3c0",
+    "destinationBranchId": "f3fba5c7-4e13-457a-b686-ead00aba1e66"
+    }
+  ```
+  <i>Response</i>
+  ```
+    {
+    "branchSequence": "A,C,E,D"
+    }
+  ```
 
 - **No branch connection - E->A**
-  ```json
-  POST http://localhost:8080/payment/process
-  Accept: application/json
-  Content-Type: application/json
-  {
-  "originBranchId": "98e63497-dabb-4d69-80fb-9411801f49e3",
-  "destinationBranchId": "60cd3195-b2c6-4d47-8ae6-a3cf4c99c3c0"
-  }
-  
-  Response:
-  {
-  "branchSequence": null
-  }
+  <br><i>Request</i><br>
+    ```
+    POST http://localhost:8080/payment/process
+    Accept: application/json
+    Content-Type: application/json
+    {
+    "originBranchId": "98e63497-dabb-4d69-80fb-9411801f49e3",
+    "destinationBranchId": "60cd3195-b2c6-4d47-8ae6-a3cf4c99c3c0"
+    }
+  ```
+  <i>Response</i>
+  ```
+    {
+    "branchSequence": null
+    }
+  ```
