@@ -47,3 +47,17 @@ The API for processing payments is exposed in the `PaymentResource` class which 
 - **PaymentResourceIntegrationTest** - Spring boot integration test class covering all the cases. (Direct branch connection, Indirect branch connection, No branch connection)<br>
 - **PaymentResourceTest** - Unit test class for `PaymentResource`.<br>
 - **PaymentServiceTest** - Unit test class for `PaymentService` covering all the cases. (Direct branch connection, Indirect branch connection, No branch connection)
+
+### Running the Application
+- **Clone the Repository**
+  ```sh 
+    git clone https://github.com/Abhilash-Koliwad/payment-service.git
+- Navigate to project directory
+  ```sh
+  cd payment-service
+- Build the project
+  ```sh
+  mvn clean install
+- Run the application
+  ```sh
+  mvn spring-boot:run
