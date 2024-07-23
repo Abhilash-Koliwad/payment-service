@@ -51,7 +51,7 @@ The API for processing payments is exposed in the `PaymentResource` class which 
 ### Running the Application
 - **Clone the Repository**
   ```sh 
-    git clone https://github.com/Abhilash-Koliwad/payment-service.git
+  git clone https://github.com/Abhilash-Koliwad/payment-service.git
 - Navigate to project directory
   ```sh
   cd payment-service
