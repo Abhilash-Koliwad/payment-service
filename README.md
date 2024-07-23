@@ -74,7 +74,7 @@ The API for processing payments is exposed in the `PaymentResource` class which 
   }
 
 ### Sample API Requests
-Below are the API requests,
+Below are the API requests and responses while running the application in local,
 - **Direct branch connection - A->B**
     <br><i>Request</i><br>
     ```
